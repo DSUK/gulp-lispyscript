@@ -1,4 +1,4 @@
-> Lispyscript to Javascript transpiler for Gulp
+#Lispyscript to Javascript transpiler for Gulp
 
 > Forked From https://github.com/babel/gulp-babel
 
