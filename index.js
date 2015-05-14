@@ -4,7 +4,7 @@ var through = require('through2');
 var applySourceMap = require('vinyl-sourcemaps-apply');
 var objectAssign = require('object-assign');
 var replaceExt = require('replace-ext');
-var babel = require('babel-core');
+var ls = require('lispyscript');
 
 module.exports = function (opts) {
 	opts = opts || {};
@@ -16,7 +16,7 @@ module.exports = function (opts) {
 		}
 
 		if (file.isStream()) {
-			cb(new gutil.PluginError('gulp-babel', 'Streaming not supported'));
+			cb(new gutil.PluginError('gulp-lispyscript', 'Streaming not supported'));
 			return;
 		}
 
@@ -26,18 +26,17 @@ module.exports = function (opts) {
 				filenameRelative: file.relative,
 				sourceMap: !!file.sourceMap
 			});
-
-			var res = babel.transform(file.contents.toString(), fileOpts);
+			var res = ls._compile(file.contents.toString(), fileOpts.filename, fileOpts.sourceMap, fileOpts.a_include_dirs);
 
 			if (file.sourceMap && res.map) {
 				applySourceMap(file, res.map);
 			}
 
-			file.contents = new Buffer(res.code);
+			file.contents = new Buffer(res);
 			file.path = replaceExt(file.path, '.js');
 			this.push(file);
 		} catch (err) {
-			this.emit('error', new gutil.PluginError('gulp-babel', err, {fileName: file.path, showProperties: false}));
+			this.emit('error', new gutil.PluginError('gulp-lispyscript', err, {fileName: file.path, showProperties: false}));
 		}
 
 		cb();
