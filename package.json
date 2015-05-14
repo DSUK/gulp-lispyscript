@@ -1,6 +1,6 @@
 {
   "name": "gulp-lispyscript",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Lispyscript to Javascript transpiler for Gulp",
   "license": "MIT",
   "repository": "https://github.com/johnhenry/gulp-lispyscript",
